@@ -1,0 +1,6 @@
+@JoinTheWrite_HostAddress = http://localhost:5137
+
+GET {{JoinTheWrite_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

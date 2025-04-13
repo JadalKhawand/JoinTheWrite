@@ -1,0 +1,31 @@
+<div class="h-screen bg-black relative overflow-hidden">
+  <app-navbar></app-navbar>
+  <img src="../../../assets/images/HomeImage.png" class="absolute top-0 left-0 w-full h-full object-cover">
+  <div class="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+
+  <div class="absolute top-36 left-10 md:left-20 lg:left-32 text-white z-10">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-left">JoinTheWrite</h1>
+      <p class="text-sm md:text-base lg:text-lg mt-2 text-left">collaborate to create the best stories and poems and biblbjoinkwe<br class="hidden md:block">bajdck jc lnkbcjqdcb bkjcb kc ksncliqeh hqebcqev</p>
+  </div>
+
+  <div class="absolute bottom-52 md:bottom-46 lg:bottom-46 left-1/2 transform -translate-x-1/2 flex gap-6 justify-center z-10">
+      <app-feature-card
+          icon="visibility"
+          title="View Writings"
+          route="/view-writings">
+          (click)=
+      </app-feature-card>
+
+      <app-feature-card
+          icon="add"
+          title="Start a new writing"
+          route="/new-writing">
+      </app-feature-card>
+
+      <app-feature-card
+          icon="edit"
+          title="Continue Writing"
+          route="/continue-writing">
+      </app-feature-card>
+  </div>
+</div>

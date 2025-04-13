@@ -11,10 +11,11 @@ namespace JoinTheWrite.Models
         [Required]
         public required string Title { get; set; }
         [Required]
-        public string Content { get; set; } = string.Empty;
-        [Required]
         public WritingStatus Status { get; set; }
         [Required]
+        public string Type { get; set; } = string.Empty;
+        public string Language { get; set; } = string.Empty;
+        public int MaxChapters { get; set; }
         public Guid AuthorId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }

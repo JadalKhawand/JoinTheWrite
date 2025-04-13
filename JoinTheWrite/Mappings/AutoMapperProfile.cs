@@ -17,8 +17,18 @@ namespace JoinTheWrite.Mappings
                 .ForMember(dest => dest.Contributions, opt => opt.Ignore()) // Contributions will be handled later
                 .ForMember(dest => dest.Comments, opt => opt.Ignore()); // Comments are empty at first
 
-            CreateMap<Creation, CreationDto>()
-                .ForMember(dest => dest.ChapterCount, opt => opt.MapFrom(src => src.Contributions.Count)); // Count the contributions (chapters)
+            CreateMap<Creation, CreationDto>();
+
+            CreateMap<Chapter, ChapterDto>()
+                .ForMember(dest => dest.FinalizedContent, opt => opt.MapFrom(src =>
+                    src.Contributions.FirstOrDefault(c => c.ContributionId == src.FinalizedContributionId).Content));
+
+            CreateMap<ChapterDto, Chapter>()
+                .ForMember(dest => dest.Contributions, opt => opt.Ignore()) // not needed from DTO
+                .ForMember(dest => dest.Creation, opt => opt.Ignore())      // avoid circular mapping
+                .ForMember(dest => dest.FinalizedContributionId, opt => opt.Ignore()) // since DTO has content not ID
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())     // managed by system
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
         }
     }
 }

@@ -60,7 +60,17 @@ namespace JoinTheWrite.Services.WritingsService.ChapterServices
 
             return chapter.ChapterNumber == maxChapterNumber;
         }
+
+        public async Task<Chapter?> GetChapterByIdAsync(Guid chapterId)
+        {
+            var chapter = await _context.Chapters
+                .Include(c => c.Contributions)
+                .FirstOrDefaultAsync(c => c.ChapterId == chapterId);
+
+            if (chapter == null) return null;
+
+            return chapter;
+        }
     }
 
-}
 }

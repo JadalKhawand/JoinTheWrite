@@ -9,5 +9,7 @@ namespace JoinTheWrite.Services.WritingsService.ChapterServices
         Task<Chapter> CreateChapterAsync(ChapterDto dto, Guid creationId);
         Task<bool> IsLastChapterAsync(int chapterId);
 
+        Task<Chapter?> GetChapterByIdAsync(Guid chapterId);
+
     }
 }

@@ -24,11 +24,17 @@ namespace JoinTheWrite.Mappings
                     src.Contributions.FirstOrDefault(c => c.ContributionId == src.FinalizedContributionId).Content));
 
             CreateMap<ChapterDto, Chapter>()
-                .ForMember(dest => dest.Contributions, opt => opt.Ignore()) // not needed from DTO
-                .ForMember(dest => dest.Creation, opt => opt.Ignore())      // avoid circular mapping
-                .ForMember(dest => dest.FinalizedContributionId, opt => opt.Ignore()) // since DTO has content not ID
-                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())     // managed by system
-                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.VotingDeadline, opt => opt.MapFrom(src => src.VotingDeadline))
+                .ForMember(dest => dest.FinalizedContributionId, opt => opt.Ignore()) // not set at creation
+                .ForMember(dest => dest.Contributions, opt => opt.Ignore())
+                .ForMember(dest => dest.ChapterId, opt => opt.Ignore())
+                .ForMember(dest => dest.ChapterNumber, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.CreationId, opt => opt.Ignore())
+                .ForMember(dest => dest.Creation, opt => opt.Ignore());
+
         }
     }
 }

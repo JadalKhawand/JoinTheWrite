@@ -1,16 +1,20 @@
-﻿using JoinTheWrite.Data;
+﻿using AutoMapper;
+using JoinTheWrite.Data;
 using JoinTheWrite.Models;
+using JoinTheWrite.Models.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace JoinTheWrite.Services.WritingsService.ChapterServices
 {
-    public class ChapterService
+    public class ChapterService : IChapterService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ChapterService(AppDbContext context)
+        public ChapterService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<List<Chapter>> GetChaptersByCreationIdAsync(int creationId)
@@ -21,22 +25,29 @@ namespace JoinTheWrite.Services.WritingsService.ChapterServices
                 .ToListAsync();
         }
 
-        public async Task<Chapter> CreateChapterAsync(Chapter chapter)
+        public async Task<Chapter> CreateChapterAsync(ChapterDto dto, Guid creationId)
         {
-            // Get the highest chapter number for this creation
-            var lastChapter = await _context.Chapters
-                .Where(c => c.CreationId == chapter.CreationId)
+            var chapter = _mapper.Map<Chapter>(dto);
+            chapter.ChapterId = Guid.NewGuid();
+            chapter.CreationId = creationId;
+            chapter.CreatedAt = DateTime.UtcNow;
+            chapter.Status = dto.Status;
+
+            // Get latest chapter number
+            int lastChapterNumber = await _context.Chapters
+                .Where(c => c.CreationId == creationId)
                 .OrderByDescending(c => c.ChapterNumber)
+                .Select(c => c.ChapterNumber)
                 .FirstOrDefaultAsync();
 
-            chapter.ChapterNumber = lastChapter == null ? 1 : lastChapter.ChapterNumber + 1;
-            chapter.CreatedAt = DateTime.UtcNow;
+            chapter.ChapterNumber = lastChapterNumber + 1;
 
             _context.Chapters.Add(chapter);
             await _context.SaveChangesAsync();
 
             return chapter;
         }
+
 
         public async Task<bool> IsLastChapterAsync(int chapterId)
         {

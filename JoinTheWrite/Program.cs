@@ -1,5 +1,6 @@
 using JoinTheWrite.Data;
 using JoinTheWrite.Mappings;
+using JoinTheWrite.Services.WritingsService.ChapterServices;
 using JoinTheWrite.Services.WritingsService.CreationServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<ICreationService, CreationService>();
+builder.Services.AddScoped<IChapterService, ChapterService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddHttpClient();

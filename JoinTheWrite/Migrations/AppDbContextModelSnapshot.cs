@@ -53,7 +53,7 @@ namespace JoinTheWrite.Migrations
 
                     b.HasIndex("CreationId");
 
-                    b.ToTable("Chapters");
+                    b.ToTable("Chapters", (string)null);
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Comment", b =>
@@ -86,7 +86,7 @@ namespace JoinTheWrite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Contribution", b =>
@@ -122,7 +122,7 @@ namespace JoinTheWrite.Migrations
 
                     b.HasIndex("CreationId");
 
-                    b.ToTable("Contributions");
+                    b.ToTable("Contributions", (string)null);
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Creation", b =>
@@ -166,7 +166,7 @@ namespace JoinTheWrite.Migrations
 
                     b.HasKey("CreationId");
 
-                    b.ToTable("Creations");
+                    b.ToTable("Creations", (string)null);
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.User", b =>
@@ -197,7 +197,7 @@ namespace JoinTheWrite.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Vote", b =>
@@ -221,7 +221,7 @@ namespace JoinTheWrite.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Votes");
+                    b.ToTable("Votes", (string)null);
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Chapter", b =>

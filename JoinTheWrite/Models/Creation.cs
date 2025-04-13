@@ -17,6 +17,7 @@ namespace JoinTheWrite.Models
         public string Language { get; set; } = string.Empty;
         public int MaxChapters { get; set; }
         public Guid AuthorId { get; set; }
+        public int ChapterCount { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
         public DateTime VotingStartDate { get; set; }

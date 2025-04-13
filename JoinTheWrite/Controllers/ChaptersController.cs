@@ -42,5 +42,20 @@ namespace JoinTheWrite.Controllers
 
             return Ok(chapter);
         }
+        // GET: api/chapter/creation/{creationId}
+        [HttpGet("creation/{creationId}")]
+        public async Task<ActionResult<IEnumerable<Chapter>>> GetChaptersByCreation(Guid creationId)
+        {
+            var chapters = await _chapterService.GetChaptersByCreationIdAsync(creationId);
+            return Ok(chapters);
+        }
+
+        // GET: api/chapter/isLast/{chapterId}
+        [HttpGet("isLast/{chapterId}")]
+        public async Task<ActionResult<bool>> IsLastChapter(Guid chapterId)
+        {
+            var isLast = await _chapterService.IsLastChapterAsync(chapterId);
+            return Ok(isLast);
+        }
     }
 }

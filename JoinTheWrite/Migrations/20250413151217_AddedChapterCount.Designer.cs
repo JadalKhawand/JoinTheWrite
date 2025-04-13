@@ -4,6 +4,7 @@ using JoinTheWrite.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JoinTheWrite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250413151217_AddedChapterCount")]
+    partial class AddedChapterCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,10 +46,15 @@ namespace JoinTheWrite.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("VotingDeadline")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ChapterId");
+
+                    b.HasIndex("CreationId");
 
                     b.ToTable("Chapters");
                 });
@@ -220,6 +228,17 @@ namespace JoinTheWrite.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Votes");
+                });
+
+            modelBuilder.Entity("JoinTheWrite.Models.Chapter", b =>
+                {
+                    b.HasOne("JoinTheWrite.Models.Creation", "Creation")
+                        .WithMany()
+                        .HasForeignKey("CreationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creation");
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Comment", b =>

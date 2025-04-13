@@ -5,9 +5,9 @@ namespace JoinTheWrite.Services.WritingsService.ChapterServices
 {
     public interface IChapterService
     {
-        Task<List<Chapter>> GetChaptersByCreationIdAsync(int creationId);
+        Task<List<Chapter>> GetChaptersByCreationIdAsync(Guid creationId);
         Task<Chapter> CreateChapterAsync(ChapterDto dto, Guid creationId);
-        Task<bool> IsLastChapterAsync(int chapterId);
+        Task<bool> IsLastChapterAsync(Guid chapterId);
 
         Task<Chapter?> GetChapterByIdAsync(Guid chapterId);
 

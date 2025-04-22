@@ -4,6 +4,7 @@ using JoinTheWrite.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JoinTheWrite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250421212143_addedForeignkeys")]
+    partial class addedForeignkeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,11 +43,10 @@ namespace JoinTheWrite.Migrations
                     b.Property<Guid?>("FinalizedContributionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FinalizedTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -66,24 +68,29 @@ namespace JoinTheWrite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ContributionId")
+                    b.Property<Guid>("CreationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ParentCommentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("PostedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("CommentId");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("CreationId");
 
-                    b.HasIndex("ContributionId");
+                    b.HasIndex("ParentCommentId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -104,24 +111,22 @@ namespace JoinTheWrite.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("CreationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("UpvoteCount")
-                        .HasColumnType("int");
 
                     b.HasKey("ContributionId");
 
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("ChapterId");
+
+                    b.HasIndex("CreationId");
 
                     b.ToTable("Contributions");
                 });
@@ -151,6 +156,9 @@ namespace JoinTheWrite.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -158,6 +166,9 @@ namespace JoinTheWrite.Migrations
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserAuthorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("VotingEndDate")
                         .HasColumnType("datetime2");
@@ -168,6 +179,8 @@ namespace JoinTheWrite.Migrations
                     b.HasKey("CreationId");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("UserAuthorId");
 
                     b.ToTable("Creations");
                 });
@@ -209,20 +222,20 @@ namespace JoinTheWrite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("ContributionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsUpvote")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("VoteId");
 
-                    b.HasIndex("AuthorId");
-
                     b.HasIndex("ContributionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Votes");
                 });
@@ -247,21 +260,27 @@ namespace JoinTheWrite.Migrations
 
             modelBuilder.Entity("JoinTheWrite.Models.Comment", b =>
                 {
-                    b.HasOne("JoinTheWrite.Models.User", "Author")
+                    b.HasOne("JoinTheWrite.Models.Creation", "Creation")
                         .WithMany("Comments")
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("CreationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JoinTheWrite.Models.Contribution", "Contribution")
+                    b.HasOne("JoinTheWrite.Models.Comment", "ParentComment")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentCommentId");
+
+                    b.HasOne("JoinTheWrite.Models.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("ContributionId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.Navigation("Creation");
 
-                    b.Navigation("Contribution");
+                    b.Navigation("ParentComment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Contribution", b =>
@@ -278,6 +297,10 @@ namespace JoinTheWrite.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JoinTheWrite.Models.Creation", null)
+                        .WithMany("Contributions")
+                        .HasForeignKey("CreationId");
+
                     b.Navigation("Author");
 
                     b.Navigation("Chapter");
@@ -286,31 +309,35 @@ namespace JoinTheWrite.Migrations
             modelBuilder.Entity("JoinTheWrite.Models.Creation", b =>
                 {
                     b.HasOne("JoinTheWrite.Models.User", "Author")
-                        .WithMany("Creations")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("JoinTheWrite.Models.User", null)
+                        .WithMany("Creations")
+                        .HasForeignKey("UserAuthorId");
 
                     b.Navigation("Author");
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Vote", b =>
                 {
-                    b.HasOne("JoinTheWrite.Models.User", "Author")
-                        .WithMany("Votes")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("JoinTheWrite.Models.Contribution", "Contribution")
                         .WithMany("Votes")
                         .HasForeignKey("ContributionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.HasOne("JoinTheWrite.Models.User", "User")
+                        .WithMany("Votes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Contribution");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Chapter", b =>
@@ -318,16 +345,23 @@ namespace JoinTheWrite.Migrations
                     b.Navigation("Contributions");
                 });
 
+            modelBuilder.Entity("JoinTheWrite.Models.Comment", b =>
+                {
+                    b.Navigation("Replies");
+                });
+
             modelBuilder.Entity("JoinTheWrite.Models.Contribution", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.Creation", b =>
                 {
                     b.Navigation("Chapters");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Contributions");
                 });
 
             modelBuilder.Entity("JoinTheWrite.Models.User", b =>

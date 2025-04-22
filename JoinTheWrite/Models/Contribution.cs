@@ -12,8 +12,14 @@ namespace JoinTheWrite.Models
         public User? Author { get; set; }
         [Required]
         public string Content { get; set; } = string.Empty;
+
+        public string Title { get; set; } = string.Empty;
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+
+        public int UpvoteCount { get; set; }
         public ICollection<Vote> Votes { get; set; } = new List<Vote>();
+        public List<Comment> Comments { get; set; } = new List<Comment>();
+
     }
 }

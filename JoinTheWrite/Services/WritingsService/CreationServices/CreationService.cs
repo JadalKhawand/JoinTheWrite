@@ -21,16 +21,44 @@ namespace JoinTheWrite.Services.WritingsService.CreationServices
 
         public async Task<List<Creation>> GetAllCreationsAsync()
         {
-            return await _context.Creations.ToListAsync();
+            return await _context.Creations
+                .Include(c => c.Chapters)
+                    .ThenInclude(ch => ch.Contributions)
+                        .ThenInclude(con => con.Votes)
+                .Include(c => c.Chapters)
+                    .ThenInclude(ch => ch.Contributions)
+                        .ThenInclude(con => con.Comments)
+                .ToListAsync();
         }
+
 
         public async Task<Creation> GetCreationByIdAsync(Guid id)
         {
-            return await _context.Creations.FindAsync(id);
+            var creation = await _context.Creations
+                .Include(c => c.Chapters)
+                    .ThenInclude(ch => ch.Contributions)
+                        .ThenInclude(con => con.Votes)
+                .Include(c => c.Chapters)
+                    .ThenInclude(ch => ch.Contributions)
+                        .ThenInclude(con => con.Comments)
+                .FirstOrDefaultAsync(c => c.CreationId == id);
+
+            if (creation == null)
+                throw new Exception("Creation not found.");
+
+            return creation;
         }
+
 
         public async Task<Creation> CreateCreationAsync(CreationDto dto)
         {
+            var authorExists = await _context.Users.AnyAsync(u => u.AuthorId == dto.AuthorId);
+            if (!authorExists)
+            {
+                throw new Exception("Author not found. Please provide a valid AuthorId.");
+            }
+            Console.WriteLine($"Received AuthorId: {dto.AuthorId}");
+
             // Step 1: Map DTO to entity (ignored fields will remain default)
             var creation = _mapper.Map<Creation>(dto);
 
@@ -63,7 +91,6 @@ namespace JoinTheWrite.Services.WritingsService.CreationServices
 
             // Update the fields for the existing record
             existing.Title = creation.Title;
-            existing.Status = creation.Status;
             existing.ModifiedAt = DateTime.UtcNow;
             existing.VotingStartDate = creation.VotingStartDate.ToString() != string.Empty ? creation.VotingStartDate : existing.VotingStartDate;
             existing.VotingEndDate = creation.VotingEndDate.ToString() != string.Empty ? creation.VotingEndDate : existing.VotingEndDate;

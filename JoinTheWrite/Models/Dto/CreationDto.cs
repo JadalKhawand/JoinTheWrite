@@ -6,5 +6,6 @@
         public string Type { get; set; } = string.Empty;
         public string Language { get; set; } = string.Empty;
         public int MaxChapters { get; set; }
+        public Guid AuthorId { get; set; }
     }
 }

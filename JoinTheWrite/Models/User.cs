@@ -5,7 +5,7 @@ namespace JoinTheWrite.Models
     public class User
     {
         [Key]
-        public Guid UserId { get; set; }
+        public Guid AuthorId { get; set; }
         [Required]
         public string Username { get; set; } = string.Empty;
         [Required, EmailAddress]
@@ -17,5 +17,6 @@ namespace JoinTheWrite.Models
         public ICollection<Contribution> Contributions { get; set; } = new List<Contribution>();
         public ICollection<Vote> Votes { get; set; } = new List<Vote>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Creation> Creations { get; set; } = new List<Creation>();
     }
 }

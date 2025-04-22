@@ -1,15 +1,14 @@
 ﻿using JoinTheWrite.Models;
+using JoinTheWrite.Models.Dto;
 
 namespace JoinTheWrite.Services.WritingsService.ContributionServices
 {
     public interface IContributionService
     {
-        Task<List<Contribution>> GetContributionsByChapterIdAsync(int chapterId);
-        Task<Contribution> SubmitContributionAsync(Contribution contribution);
-        Task<Contribution> GetContributionByIdAsync(int id);
-        Task<bool> DeleteContributionAsync(int id);
-        Task<bool> IsContributionDeadlineReachedAsync(int chapterId);
-        Task<Contribution> GetWinningContributionAsync(int chapterId); // based on votes
+        Task<Contribution> CreateContributionAsync(ContributionDto dto);
+        Task<Contribution?> GetContributionByIdAsync(Guid id);
+        Task<List<Contribution>> GetContributionsByChapterAsync(Guid chapterId);
+        Task<Contribution> GetWinningContributionAsync(Guid chapterId); // based on votes
 
     }
 }

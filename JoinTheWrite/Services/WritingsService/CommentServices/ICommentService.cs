@@ -1,13 +1,13 @@
 ﻿using JoinTheWrite.Models;
+using JoinTheWrite.Models.Dto;
 
 namespace JoinTheWrite.Services.WritingsService.CommentServices
 {
     public interface ICommentService
     {
-        Task<List<Comment>> GetCommentsByCreationIdAsync(int creationId);
-        Task<List<Comment>> GetCommentsByContributionIdAsync(int contributionId);
-        Task<Comment> AddCommentAsync(Comment comment);
-        Task<bool> DeleteCommentAsync(int commentId);
+        Task<Comment> AddCommentAsync(CommentDto dto);
+        Task<IEnumerable<Comment>> GetCommentsByChapterIdAsync(Guid contributionId);
+        Task<bool> DeleteCommentAsync(Guid commentId);
 
     }
 }

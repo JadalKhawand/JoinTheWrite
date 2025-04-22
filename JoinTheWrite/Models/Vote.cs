@@ -7,8 +7,8 @@ namespace JoinTheWrite.Models
         [Key]
         public Guid VoteId { get; set; }
 
-        public Guid UserId { get; set; }
-        public User? User { get; set; }
+        public Guid AuthorId { get; set; }
+        public User? Author { get; set; }
 
         public Guid ContributionId { get; set; }
         public Contribution? Contribution { get; set; }

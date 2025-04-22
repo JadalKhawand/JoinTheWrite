@@ -20,14 +20,10 @@ namespace JoinTheWrite.Controllers
 
         // POST: api/chapters
         [HttpPost("creations/{creationId}")]
-        public async Task<ActionResult<Chapter>> CreateChapterAsync(Guid creationId , [FromBody] ChapterDto chapter)
+        public async Task<ActionResult<Chapter>> CreateChapterAsync(Guid creationId)
         {
-            if (chapter == null)
-            {
-                return BadRequest();
-            }
-
-            var createdChapter = await _chapterService.CreateChapterAsync(chapter,creationId);
+           
+            var createdChapter = await _chapterService.CreateChapterAsync(creationId);
 
             // You can return 201 Created status with the location of the newly created resource
             return CreatedAtAction(nameof(GetChapter), new { id = createdChapter.ChapterId }, createdChapter);

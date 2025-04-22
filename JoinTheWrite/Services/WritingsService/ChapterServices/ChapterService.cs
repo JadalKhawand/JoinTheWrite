@@ -26,13 +26,13 @@ namespace JoinTheWrite.Services.WritingsService.ChapterServices
                 .ToListAsync();
         }
 
-        public async Task<Chapter> CreateChapterAsync(ChapterDto dto, Guid creationId)
+        public async Task<Chapter> CreateChapterAsync(Guid creationId)
         {
             if (await IsMaxChapterReachedAsync(creationId))
             {
                 throw new InvalidOperationException("Cannot create more chapters. Maximum limit reached.");
             }
-            var chapter = _mapper.Map<Chapter>(dto);
+            var chapter = new Chapter();
             chapter.ChapterId = Guid.NewGuid();
             chapter.CreationId = creationId;
             chapter.CreatedAt = DateTime.UtcNow;
@@ -65,7 +65,6 @@ namespace JoinTheWrite.Services.WritingsService.ChapterServices
             var currentChapters = await _context.Chapters
                 .Where(c => c.CreationId == creationId)
                 .CountAsync();
-
             return currentChapters >= maxChapters;
         }
 

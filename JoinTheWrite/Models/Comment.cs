@@ -6,14 +6,12 @@ namespace JoinTheWrite.Models
     {
         [Key]
         public Guid CommentId { get; set; }
-        public Guid CreationId { get; set; }
-        public Creation? Creation { get; set; }
-        public Guid UserId { get; set; }
-        public User? User { get; set; }
+        public Guid ContributionId { get; set; }
+        public Contribution? Contribution { get; set; }
+        public Guid AuthorId { get; set; }
+        public User? Author { get; set; }
         public string Content { get; set; } = string.Empty;
         public DateTime PostedAt { get; set; } = DateTime.UtcNow;
-        public Guid? ParentCommentId { get; set; }
-        public Comment? ParentComment { get; set; }
-        public ICollection<Comment> Replies { get; set; } = new List<Comment>();
+        
     }
 }

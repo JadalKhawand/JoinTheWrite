@@ -2,10 +2,10 @@
 {
     public interface IVoteService
     {
-        Task<bool> CastVoteAsync(int userId, int contributionId);
-        Task<bool> RemoveVoteAsync(int userId, int contributionId);
-        Task<int> GetVoteCountAsync(int contributionId);
-        Task<bool> HasUserVotedAsync(int userId, int chapterId);
+        Task<bool> UpvoteAsync(Guid contributionId, Guid userId);
+        Task<bool> RemoveVoteAsync(Guid contributionId, Guid userId);
+        Task<int> GetVoteCountAsync(Guid contributionId);
+        Task EvaluateVotesAndFinalizeAsync(Guid chapterId);
 
     }
 }

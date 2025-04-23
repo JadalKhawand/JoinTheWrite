@@ -38,19 +38,19 @@ namespace JoinTheWrite.Controllers
             var contributions = await _contributionService.GetContributionsByChapterAsync(chapterId);
             return Ok(contributions);
         }
-        [HttpPost("chapter/{chapterId}/finalize")]
-        public async Task<ActionResult<Contribution>> FinalizeChapter(Guid chapterId)
-        {
-            try
-            {
-                var winning = await _contributionService.GetWinningContributionAsync(chapterId);
-                return Ok(winning);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+       // [HttpPost("chapter/{chapterId}/finalize")]
+       // public async Task<ActionResult<Contribution>> FinalizeChapter(Guid chapterId)
+       // {
+       //     try
+       //     {
+       //         var winning = await _contributionService.GetWinningContributionAsync(chapterId);
+       //         return Ok(winning);
+       //     }
+       //     catch (InvalidOperationException ex)
+       //     {
+       //         return BadRequest(ex.Message);
+       //     }
+       // }
 
     }
 }

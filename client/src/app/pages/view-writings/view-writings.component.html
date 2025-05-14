@@ -1,1 +1,56 @@
-<p>view-writings works!</p>
+<div class="min-h-screen bg-gradient-to-br from-sky-100 to-sky-300 py-10">
+  <div class="container mx-auto px-4">
+    <div class="p-2 my-2">
+
+      <div class="absolute top-5 left-5 text-black font-bold text-2xl z-10">JTW</div>
+      <div class="absolute top-5 right-5 text-black z-10 flex items-center">
+          <a href="#" class="text-black no-underline mr-4">home</a>
+          <a href="#" class="text-black no-underline mr-4">About</a>
+          <span class="material-icons text-4xl">person</span>
+      </div>
+      
+    </div>
+    <div class="flex items-center mb-6 justify-between">
+      <div class="relative w-1/4 mr-4">
+        <input
+  type="text"
+  class="w-full h-10 rounded-full bg-white border-gray-300 focus:ring-sky-500 focus:border-sky-500 pl-5"
+  placeholder="Search..."
+/>
+        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </button>
+      </div>
+      <div class="relative w-1/4">
+        <div class="py-2 px-3">
+          <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold text-left">JoinTheWrite</h1>
+      
+          
+        </div>
+        </div>
+    </div>
+
+    <div class="mb-6">
+      <div class="flex space-x-4 text-gray-700">
+        <button class="py-2 px-4 rounded-full bg-sky-200 text-sky-700 focus:outline-none">Stories</button>
+        <button class="py-2 px-4 rounded-full hover:bg-sky-100 hover:text-sky-700 focus:outline-none">Poems</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-24">
+      <app-writing-card *ngFor="let writing of writings" [writing]="writing"></app-writing-card>
+    </div>
+
+    <footer class="mt-8 flex items-center justify-center text-gray-500">
+      <div class="flex items-center space-x-4">
+        <button>&lt;</button>
+        <span>1</span>
+        <span>...</span>
+        <span>5</span>
+        <button>&gt;</button>
+      </div>
+    </footer>
+  </div>
+</div>
